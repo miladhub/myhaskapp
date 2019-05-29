@@ -1,6 +1,22 @@
 module Lib
-    ( someFunc
+    ( Env(..), App, run
     ) where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+import Control.Monad.Reader
+
+data Env =
+  Env {
+    host :: String
+  , port :: Int
+  }
+  deriving (Eq, Show)
+
+type App = ReaderT Env IO
+
+run :: Show a => Env -> App a -> IO ()
+run e app = do
+  putStrLn "Running..."
+  a <- runReaderT app $ e
+  putStrLn $ show a
+  return ()
+
