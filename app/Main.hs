@@ -5,8 +5,7 @@ import Control.Monad.Reader
 
 main :: IO ()
 main = do
-  let e = Env "myhost" 100
-  run e app
+  run (Env "myhost" 100) app
 
 app :: App Int
 app = do
