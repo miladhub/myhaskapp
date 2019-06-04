@@ -92,3 +92,31 @@ err' = do
   s <- get
   put $ s ++ ["error..."]
   rt
+
+type Bazz =
+  ExceptT
+    String
+    (ReaderT Env
+      (StateT [String] IO))
+
+runBazz :: Show a => Bazz a -> IO ()
+runBazz bazz = do
+  let e = Env "myhost" 42
+      rei = runExceptT bazz
+      r = runReaderT rei $ e
+      s = runStateT r $ ["initializing"]
+  (ei, st) <- s -- (Either String a, [String])   
+  putStrLn $ "Final state: " ++ show st
+  case ei of
+    Left err -> putStrLn $ "Error: " ++ err
+    Right i -> putStrLn $ "OK: " ++ (show i)
+  return ()
+
+bazz :: Bazz Int
+bazz = return 42
+
+err'' :: Bazz ()
+err'' = do
+  s <- get
+  put $ s ++ ["bazz said error"]
+  ExceptT $ return $ Left "foo"
