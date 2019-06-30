@@ -1,20 +1,25 @@
 module Others where
 
-type App = ReaderT Env IO
+import App
+import Control.Monad.Reader
+import Control.Monad.State
+import Control.Monad.Except
 
-run :: Show a => Env -> App a -> IO ()
-run e app = do
+type App' = ReaderT Env IO
+
+run' :: Show a => Env -> App' a -> IO ()
+run' e app = do
   putStrLn "Running..."
   a <- runReaderT app $ e
   putStrLn $ show a
   return ()
 
-main :: IO ()
-main = do
-  run (Env "myhost" 100) app
+main' :: IO ()
+main' = do
+  run' (Env "myhost" 100) app'
 
-app :: App Int
-app = do
+app' :: App' Int
+app' = do
   e <- ask
   liftIO $ putStrLn (host e)
   return 42
