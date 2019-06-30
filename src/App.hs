@@ -24,7 +24,7 @@ run env app = do
       resultAndState = runStateT statet $ ["Initializing"]
   -- (Either String a, [String])
   (result, finalState) <- resultAndState
-  putStrLn $ "Final state: " ++ show result
+  putStrLn $ "Final state: " ++ show finalState
   case result of
     Left err -> putStrLn $ "Error: " ++ err
     Right a  -> putStrLn $ "OK: " ++ (show a)
