@@ -5,18 +5,18 @@ import App
 main :: IO ()
 main = do
   run (Env "myhost" 42) $ do
-    bazz
-    bizz
-    bizz
+    n <- num 6
+    m <- num 7
+    e <- getEnv
+    let p = port e
+    track "Multiplying"
+    return $ n * m
+    track "Failing"
     err
+    track "Finally"
 
-bazz :: App Int
-bazz = return 42
-
-bizz :: App Int
-bizz = do
-  e <- getEnv
-  let p = port e
-  track "Bizzing"
-  return $ 42 + p
+num :: Int -> App Int
+num n = do
+  track $ "Yielding " ++ (show n)
+  return n
 
