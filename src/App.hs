@@ -43,3 +43,12 @@ err = do
   track "Error"
   ExceptT $ return $ Left "foo"
 
+line :: App String
+line = liftIO $ getLine
+
+runLine :: IO ()
+runLine = do
+  run (Env "myhost" 42) $ do
+    l <- line
+    return $ "Line: " ++ l
+
